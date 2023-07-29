@@ -3,7 +3,6 @@
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "target": "ES2021",
@@ -17,9 +16,13 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "emitDecoratorMetadata": true,
+    "strict": false,
     "paths": {
       "@src/*": ["src/*"],
-      "@modules/*": ["src/modules/*"]
+      "@modules/*": ["src/modules/*"],
+      "@entities/*": ["src/entities/*"],
+      "@core/*": ["src/core/*"],
     }
   }
 }
