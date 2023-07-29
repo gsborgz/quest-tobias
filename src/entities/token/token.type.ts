@@ -1,7 +1,5 @@
-import { ObjectId } from "typeorm";
-
 export type TokenPayload = {
-  id: ObjectId;
+  id: string;
   name: string;
   email: string;
   credits: number;

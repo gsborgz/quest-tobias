@@ -91,11 +91,7 @@ export class AuthService {
   }
 
   private async findUserByEmail(email: string): Promise<User> {
-    const user = await this.dataSource.getRepository(User).findOneBy({ email });
-
-    if (!user) {
-      throw new BadRequestException('User not found');
-    }
+    const user = await this.dataSource.getRepository(User).findOneByOrFail({ email });
 
     return user;
   }
@@ -107,7 +103,7 @@ export class AuthService {
   }
 
   private async checkIfUserDoesNotExist(email: string): Promise<void> {
-    const user = await this.dataSource.getRepository(User).findOneBy({ email });
+    const user = await this.dataSource.getRepository(User).findOneBy({ email } );
 
     if (user) {
       throw new BadRequestException('User already exists');

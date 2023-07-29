@@ -1,9 +1,10 @@
-import { Column, Index, ObjectId, ObjectIdColumn } from "typeorm";
+import { ObjectId } from "mongodb";
+import { Column, ObjectIdColumn } from "typeorm";
 
 export class BaseEntity {
 
   @ObjectIdColumn({ type: 'json' })
-  public id: ObjectId;
+  public _id: ObjectId | string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   public created_at: Date;

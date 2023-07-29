@@ -1,10 +1,11 @@
-import { Entity, Column, Index, PrimaryGeneratedColumn, ObjectIdColumn, ObjectId } from 'typeorm';
+import { ObjectId } from 'mongodb';
+import { Entity, Column, Index, ObjectIdColumn } from 'typeorm';
 
 @Entity('tokens')
 export class Token {
 
 	@ObjectIdColumn({ type: 'json' })
-	public id: ObjectId;
+	public _id: ObjectId | string;
 
 	@Column({ type: 'string' })
 	public token: string;
@@ -13,9 +14,9 @@ export class Token {
 	@Index()
 	public user_id: ObjectId;
 
-	constructor(token: string, user_id: ObjectId) {
+	constructor(token: string, user_id: string) {
 		this.token = token;
-		this.user_id = user_id;
+		this.user_id = new ObjectId(user_id);
 	}
 
 }

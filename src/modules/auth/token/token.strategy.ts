@@ -27,7 +27,7 @@ export class TokenStrategy extends PassportStrategy(Strategy) {
 			throw new UnauthorizedException('Invalid token');
 		}
 
-		user.id = payload.id;
+		user._id = payload.id;
 		user.name = payload.name;
 		user.email = payload.email;
 		user.credits = payload.credits;

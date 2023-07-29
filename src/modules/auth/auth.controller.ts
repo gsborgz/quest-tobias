@@ -4,7 +4,7 @@ import { PasswordResetDTO, SigninDTO, SignupDTO } from '@entities/user/user.type
 import { AuthProtection } from '@core/decorators/auth-protection.decorator';
 import { DeleteResult } from 'typeorm';
 
-@Controller()
+@Controller('auth')
 export class AuthController {
 
   constructor(private readonly authService: AuthService) {}
