@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DataSource, DeleteResult } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { SigninDTO, SignupDTO } from '@entities/user/user.type';
+import { SigninDTO, SigninResultDTO, SignupDTO } from '@entities/user/user.type';
 import { User } from '@entities/user/user.entity';
 import { session } from '@core/session';
 import { Token } from '@entities/token/token.entity';
@@ -19,22 +19,37 @@ export class AuthService {
     return session.getUser();
   }
 
-  public async signin(body: SigninDTO): Promise<string> {
+  public async signin(body: SigninDTO): Promise<SigninResultDTO> {
     const user = await this.findUserByEmail(body.email);
+    const result = new SigninResultDTO();
 
     await this.comparePassword(body, user);
 
-		return this.tokenService.create(user, body.expires_in);
+    const token = await this.tokenService.create(user, body.expires_in);
+
+    result.token = token;
+
+    return result;
   }
 
   public async signup(body: SignupDTO) {
+    const signinBody = { email: body.email, password: body.password, expires_in: 10000 };
+    const user = new User();
+
     await this.checkIfUserDoesNotExist(body.email);
 
     this.checkIfPasswordsMatch(body);
 
     await this.encryptPassword(body);
 
-    return this.dataSource.getRepository(User).save(body);
+    user.name = body.name;
+    user.email = body.email;
+    user.password = body.password;
+    user.credits = 0;
+
+    await this.dataSource.getRepository(User).save(user);
+
+    return this.signin(signinBody);
   }
 
   // public async requestPasswordReset({ email }: PasswordResetDTO): Promise<void> {

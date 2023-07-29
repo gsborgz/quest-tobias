@@ -6,6 +6,12 @@ export class SigninDTO {
 
 }
 
+export class SigninResultDTO {
+
+  public token: string;
+
+}
+
 export class SignupDTO {
 
   public name: string;

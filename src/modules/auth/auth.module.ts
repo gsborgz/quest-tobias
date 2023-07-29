@@ -8,4 +8,4 @@ import { TokenModule } from '@modules/auth/token/token.module';
   controllers: [AuthController],
   providers: [AuthService]
 })
-export class UserModule {}
+export class AuthModule {}

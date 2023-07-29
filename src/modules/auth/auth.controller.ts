@@ -9,18 +9,18 @@ export class AuthController {
 
   constructor(private readonly authService: AuthService) {}
 
-  @Get('/me')
+  @Get('me')
   @AuthProtection()
   public me() {
     return this.authService.getMe();
   }
 
-  @Post('/signin')
+  @Post('signin')
   public signin(@Body() body: SigninDTO) {
     return this.authService.signin(body);
   }
 
-  @Post('/signup')
+  @Post('signup')
   public signup(@Body() body: SignupDTO) {
     return this.authService.signup(body);
   }
@@ -30,7 +30,7 @@ export class AuthController {
 	// 	return this.authService.requestPasswordReset(body);
 	// }
 
-  @Delete('/logout')
+  @Delete('logout')
 	@AuthProtection()
 	public async logout(@Headers('Authorization') token: string): Promise<DeleteResult> {
 		return this.authService.logout(token);

@@ -14,6 +14,7 @@ const mongoCluster = process.env.MONGO_CLUSTER;
 
 export const mongoConfig = {
   type: 'mongodb',
+  database: 'tobias',
   url: `mongodb+srv://${mongoUser}:${mongoPassword}@${mongoCluster}/?retryWrites=true&w=majority`,
   entities: [User, Task, Reward, Token],
   synchronize: true,
