@@ -6,6 +6,7 @@ import { User } from '@entities/user/user.entity';
 import { Token } from '@entities/token/token.entity';
 import { TokenPayload } from '@entities/token/token.type';
 import { session } from '@core/session';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class TokenStrategy extends PassportStrategy(Strategy) {
@@ -19,7 +20,7 @@ export class TokenStrategy extends PassportStrategy(Strategy) {
 	} 
 
 	public async validate(payload: TokenPayload) {
-		const databaseToken = await this.dataSource.getRepository(Token).findOneByOrFail({ user_id: payload.id });
+		const databaseToken = await this.dataSource.getRepository(Token).findOneByOrFail({ user_id: new ObjectId(payload.id) });
 
 		if (!databaseToken) {
 			throw new UnauthorizedException('Invalid token');
