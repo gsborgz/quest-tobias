@@ -21,12 +21,20 @@ export class TokenStrategy extends PassportStrategy(Strategy) {
 
 	public async validate(payload: TokenPayload) {
 		const databaseToken = await this.dataSource.getRepository(Token).findOneByOrFail({ user_id: new ObjectId(payload.id) });
+		const user = new User();
 
 		if (!databaseToken) {
 			throw new UnauthorizedException('Invalid token');
 		}
 
-		session.setUser(payload as User);
+		user.id = payload.id;
+		user.name = payload.name;
+		user.email = payload.email;
+		user.credits = payload.credits;
+		user.created_at = payload.created_at;
+		user.updated_at = payload.updated_at;
+
+		session.setUser(user);
 
 		return { id: payload.id };
 	}

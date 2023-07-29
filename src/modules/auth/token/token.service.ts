@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { TokenHelper } from '@modules/auth/token/token.helper';
 import { Token } from '@entities/token/token.entity';
 import { User } from '@entities/user/user.entity';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class TokenService {
@@ -31,7 +32,7 @@ export class TokenService {
 
 		const { id } = await this.tokenHelper.getUserData(token);
 
-		return this.dataSource.getRepository(Token).delete({ user_id: id });
+		return this.dataSource.getRepository(Token).delete({ user_id: new ObjectId(id) });
 	}
 
 }
