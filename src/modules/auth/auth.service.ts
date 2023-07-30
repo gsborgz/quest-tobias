@@ -6,6 +6,7 @@ import { User } from '@entities/user/user.entity';
 import { session } from '@core/session';
 import { Token } from '@entities/token/token.entity';
 import { TokenService } from '@modules/auth/token/token.service';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class AuthService {
@@ -15,8 +16,11 @@ export class AuthService {
     private readonly tokenService: TokenService
   ) {}
 
-  public async getMe() {
-    return session.getUser();
+  public getMe(): Promise<User> {
+    return this.dataSource.getRepository(User).findOneOrFail({
+      select: ['_id', 'name', 'email', 'credits'],
+      where: { _id: new ObjectId(session.getUser()._id) }
+    });
   }
 
   public async signin(body: SigninDTO): Promise<SigninResultDTO> {
@@ -32,7 +36,7 @@ export class AuthService {
     return result;
   }
 
-  public async signup(body: SignupDTO) {
+  public async signup(body: SignupDTO): Promise<SigninResultDTO> {
     const signinBody = { email: body.email, password: body.password, expires_in: 10000 };
     const user = new User();
 

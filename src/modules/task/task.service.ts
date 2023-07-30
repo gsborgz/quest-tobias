@@ -4,17 +4,21 @@ import { ObjectId } from 'mongodb';
 import { session } from '@core/session';
 import { Task } from '@entities/task/task.entity';
 import { TaskStatus } from '@entities/task/task.type';
+import { User } from '@entities/user/user.entity';
+import { QueryData } from '@core/type';
 
 @Injectable()
 export class TaskService {
 
   constructor(private readonly dataSource: DataSource) {}
 
-  public findAll() {
+  public findAll(query: QueryData<Task>) {
+    const { where } = query;
+
     return this.dataSource.getRepository(Task).find({
       where: {
         user_id: new ObjectId(session.getUser()._id),
-        status: TaskStatus.PENDING
+        status: where.status
       }
     });
   }
@@ -32,6 +36,20 @@ export class TaskService {
     console.log('i');
 
     return this.dataSource.getRepository(Task).save(body);
+  }
+
+  public async finishTask(id: string): Promise<void> {
+    await this.validateId(id);
+
+    const [task, user] = await Promise.all([
+      this.dataSource.getRepository(Task).findOneBy({ _id: new ObjectId(id) }),
+      this.dataSource.getRepository(User).findOneBy({ _id: new ObjectId(session.getUser()._id) })
+    ]);
+
+    await Promise.all([
+      this.dataSource.getRepository(Task).update({ _id: new ObjectId(id) }, { status: TaskStatus.FINISHED }),
+      this.dataSource.getRepository(User).update({ _id: new ObjectId(session.getUser()._id) }, { credits: user.credits + task.value })
+    ]);
   }
 
   public async delete(id: string) {

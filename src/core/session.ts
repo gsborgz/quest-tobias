@@ -12,6 +12,10 @@ class Session {
 		this.user = user;
 	}
 
+	public setCredits(credits: number) {
+		this.user.credits = credits;
+	}
+
 }
 
 export const session = new Session();
