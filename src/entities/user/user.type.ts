@@ -49,3 +49,15 @@ export class SigninResultDTO {
   public token: string;
 
 }
+
+export class UpdatePasswordDTO {
+
+  @IsNotEmpty()
+  @IsString()
+  public password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public password_confirmation: string;
+
+}

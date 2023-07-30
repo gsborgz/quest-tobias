@@ -1,0 +1,77 @@
+doctype strict
+html(lang="pt-BR")
+	head
+		meta(http-equiv="Content-Type" content="text/html" charset="UTF-8")
+		meta(name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1")
+
+		link(rel="preconnect" href="https://fonts.googleapis.com")
+		link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
+		link(href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet")
+
+		style(type="text/css").
+			.o-email-container {
+				font-family: 'Nunito', sans-serif;
+				font-size: 1rem;
+				background: #FFFFFF;
+			}
+
+			.o-email-header {
+				text-align: center;
+				font: 2rem 'Rowdies', sans-serif;
+				font-weight: 800;
+				letter-spacing: 0.1rem;
+				color: #4ED1B3;
+				padding: 1rem;
+				background: #031c42;
+				user-select: none;
+			}
+
+			.o-email-footer {
+				padding: 1rem;
+				color: #FFFFFF;
+				background: #031c42;
+			}
+
+			.o-text-container {
+				margin: 40px;
+				text-align: justify;
+			}
+
+			.o-text-bold {
+				font-weight: 600;
+			}
+
+			.o-important-message {
+				text-align: center;
+				font-size: 1.5rem;
+			}
+
+			.o-link-button {
+				text-decoration: none;
+				height: 2.2rem;
+				padding: 1.1rem;
+				margin: 0 auto;
+				font-size: 1rem;
+				font-weight: 800;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				border: 0;
+				border-radius: 10px;
+				color: #FFFFFF;
+				background: #4ED1B3;
+			}
+
+	body
+		div(class="o-email-container")
+			header(class="o-email-header")
+				spam My Quest
+
+			section(class="o-text-container")
+				p Olá, #{name}!
+				p Uma solicitação foi feita para alteração da senha da sua conta. É só clicar no botão logo abaixo ou, caso você não tenha solicitado isso, apenas ignore esse e-mail.
+				br
+				a(href=`${link}` class="o-link-button") RESETAR MINHA SENHA
+
+			footer(class="o-email-footer")
+				spam Essa é uma mensagem automática enviada pelo sistema Odyssey.

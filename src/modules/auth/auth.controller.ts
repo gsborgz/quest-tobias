@@ -3,6 +3,7 @@ import { AuthService } from '@modules/auth/auth.service';
 import { PasswordResetDTO, SigninDTO, SignupDTO } from '@entities/user/user.type';
 import { AuthProtection } from '@core/decorators/auth-protection.decorator';
 import { DeleteResult } from 'typeorm';
+import { BaseMessage } from '@core/type';
 
 @Controller('auth')
 export class AuthController {
@@ -25,10 +26,10 @@ export class AuthController {
     return this.authService.signup(body);
   }
 
-  // @Post('request-password-reset')
-	// public async requestPasswordReset(@Body() body: PasswordResetDTO): Promise<BaseMessage> {
-	// 	return this.authService.requestPasswordReset(body);
-	// }
+  @Post('request-password-reset')
+	public async requestPasswordReset(@Body() body: PasswordResetDTO): Promise<BaseMessage> {
+		return this.authService.requestPasswordReset(body);
+	}
 
   @Delete('logout')
 	@AuthProtection()
