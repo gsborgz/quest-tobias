@@ -33,8 +33,6 @@ export class TaskService {
     body.user_id = new ObjectId(session.getUser()._id);
     body.date = new Date(body.date);
 
-    console.log('i');
-
     return this.dataSource.getRepository(Task).save(body);
   }
 
