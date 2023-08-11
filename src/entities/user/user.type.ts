@@ -34,6 +34,10 @@ export class SignupDTO {
   @IsString()
   public password_confirmation: string;
 
+  @IsNotEmpty()
+  @IsNumber()
+  public expires_in: number;
+
 }
 
 export class PasswordResetDTO {

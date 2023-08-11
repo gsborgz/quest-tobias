@@ -40,7 +40,7 @@ export class AuthService {
   }
 
   public async signup(body: SignupDTO): Promise<SigninResultDTO> {
-    const signinBody = { email: body.email, password: body.password, expires_in: 10000 };
+    const signinBody = { email: body.email, password: body.password, expires_in: body.expires_in };
     const user = new User();
 
     await this.checkIfUserDoesNotExist(body.email);
