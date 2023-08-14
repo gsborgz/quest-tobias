@@ -5,7 +5,7 @@ import { AuthProtection } from '@core/decorators/auth-protection.decorator';
 import { QueryData } from '@core/type';
 import { QueryPipe } from '@core/pipe/query.pipe';
 
-@Controller('task')
+@Controller('tasks')
 export class TaskController {
 
   constructor(private readonly taskService: TaskService) {}

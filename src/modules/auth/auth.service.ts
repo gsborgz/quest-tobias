@@ -91,7 +91,7 @@ export class AuthService {
 		return { message: 'Password updated' };
 	}
 
-	public logout(token: string): Promise<DeleteResult> {
+	public signout(token: string): Promise<DeleteResult> {
 		return this.dataSource.getRepository(Token).delete(token);
 	}
 

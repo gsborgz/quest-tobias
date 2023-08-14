@@ -31,10 +31,10 @@ export class AuthController {
 		return this.authService.requestPasswordReset(body);
 	}
 
-  @Delete('logout')
+  @Delete('signout')
 	@AuthProtection()
-	public async logout(@Headers('Authorization') token: string): Promise<DeleteResult> {
-		return this.authService.logout(token);
+	public async signout(@Headers('Authorization') token: string): Promise<DeleteResult> {
+		return this.authService.signout(token);
 	}
 
 }

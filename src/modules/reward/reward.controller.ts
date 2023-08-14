@@ -5,7 +5,7 @@ import { QueryPipe } from '@core/pipe/query.pipe';
 import { QueryData } from '@core/type';
 import { Reward } from '@entities/reward/reward.entity';
 
-@Controller('reward')
+@Controller('rewards')
 export class RewardController {
 
   constructor(private readonly rewardService: RewardService) {}
