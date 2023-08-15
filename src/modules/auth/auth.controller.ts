@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Post, Delete, Headers } from '@nestjs/common';
 import { AuthService } from '@modules/auth/auth.service';
-import { PasswordResetDTO, SigninDTO, SignupDTO } from '@entities/user/user.type';
+import { PasswordResetDTO, SigninDTO, SigninResultDTO, SignupDTO } from '@entities/user/user.type';
 import { AuthProtection } from '@core/decorators/auth-protection.decorator';
 import { DeleteResult } from 'typeorm';
 import { BaseMessage } from '@core/type';
+import { User } from '@entities/user/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -12,17 +13,17 @@ export class AuthController {
 
   @Get('me')
   @AuthProtection()
-  public me() {
+  public me(): Promise<User> {
     return this.authService.getMe();
   }
 
   @Post('signin')
-  public signin(@Body() body: SigninDTO) {
+  public signin(@Body() body: SigninDTO): Promise<SigninResultDTO> {
     return this.authService.signin(body);
   }
 
   @Post('signup')
-  public signup(@Body() body: SignupDTO) {
+  public signup(@Body() body: SignupDTO): Promise<SigninResultDTO> {
     return this.authService.signup(body);
   }
 
