@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Delete, Headers } from '@nestjs/common';
+import { Body, Controller, Get, Post, Delete, Headers, Req } from '@nestjs/common';
 import { AuthService } from '@modules/auth/auth.service';
 import { PasswordResetDTO, SigninDTO, SigninResultDTO, SignupDTO } from '@entities/user/user.type';
 import { AuthProtection } from '@core/decorators/auth-protection.decorator';
@@ -13,7 +13,9 @@ export class AuthController {
 
   @Get('me')
   @AuthProtection()
-  public me(): Promise<User> {
+  public me(@Req() req): Promise<User> {
+    console.log(req.headers);
+    
     return this.authService.getMe();
   }
 

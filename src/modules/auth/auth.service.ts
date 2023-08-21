@@ -28,9 +28,14 @@ export class AuthService {
 
   public async signin(body: SigninDTO): Promise<SigninResultDTO> {
     const user = await this.findUserByEmail(body.email);
+    const userToken = await this.dataSource.getRepository(Token).findOneBy({ user_id: new ObjectId(user._id) });
     const result = new SigninResultDTO();
 
     await this.comparePassword(body, user);
+
+    if (userToken) {
+      await this.dataSource.getRepository(Token).delete(userToken._id);
+    }
 
     const token = await this.tokenService.create(user, body.expires_in);
 
@@ -108,7 +113,11 @@ export class AuthService {
   }
 
   private async findUserByEmail(email: string): Promise<User> {
-    const user = await this.dataSource.getRepository(User).findOneByOrFail({ email });
+    const user = await this.dataSource.getRepository(User).findOneBy({ email });
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
 
     return user;
   }
