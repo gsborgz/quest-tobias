@@ -1,11 +1,11 @@
 import { Column, Entity, Index } from "typeorm";
 import { BaseEntity } from "@entities/base.entity";
-import { TaskStatus } from "@entities/task/task.type";
+import { QuestStatus } from "@src/entities/quest/quest.type";
 import { IsEnum, IsJSON, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
 import { ObjectId } from "mongodb";
 
 @Entity()
-export class Task extends BaseEntity {
+export class Quest extends BaseEntity {
 
   @Column({ type: 'string' })
   @IsNotEmpty()
@@ -28,11 +28,11 @@ export class Task extends BaseEntity {
   @IsPositive()
   public value: number;
 
-  @Column({ type: 'enum', enum: TaskStatus })
+  @Column({ type: 'enum', enum: QuestStatus })
   @Index()
   @IsNotEmpty()
-  @IsEnum(TaskStatus)
-  public status: TaskStatus;
+  @IsEnum(QuestStatus)
+  public status: QuestStatus;
 
   @Column({ type: 'json' })
   @Index()

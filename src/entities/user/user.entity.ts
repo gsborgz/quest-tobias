@@ -1,6 +1,6 @@
 import { Column, Entity, Index } from "typeorm";
 import { BaseEntity } from "@entities/base.entity";
-import { Task } from "@entities/task/task.entity";
+import { Quest } from "@src/entities/quest/quest.entity";
 import { Reward } from "@entities/reward/reward.entity";
 import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 

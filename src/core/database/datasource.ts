@@ -1,6 +1,6 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { User } from '@entities/user/user.entity';
-import { Task } from '@entities/task/task.entity';
+import { Quest } from '@src/entities/quest/quest.entity';
 import { Reward } from '@entities/reward/reward.entity';
 import { Token } from '@entities/token/token.entity';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
@@ -16,7 +16,7 @@ export const mongoConfig = {
   type: 'mongodb',
   database: 'tobias',
   url: `mongodb+srv://${mongoUser}:${mongoPassword}@${mongoCluster}/?retryWrites=true&w=majority`,
-  entities: [User, Task, Reward, Token],
+  entities: [User, Quest, Reward, Token],
   synchronize: true,
 } as TypeOrmModuleOptions;
 
