@@ -96,8 +96,10 @@ export class AuthService {
 		return { message: 'Password updated' };
 	}
 
-	public signout(token: string): Promise<DeleteResult> {
-		return this.dataSource.getRepository(Token).delete(token);
+	public signout(): Promise<DeleteResult> {
+		return this.dataSource.getRepository(Token).delete({
+      user_id: new ObjectId(session.getUser()._id)
+    });
 	}
 
   private async encryptPassword(password: string): Promise<string> {
