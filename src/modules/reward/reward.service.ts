@@ -14,12 +14,16 @@ export class RewardService {
 
   public findAll(query: QueryData<Reward>) {
     const { where } = query;
+    const whereOptions = {
+      user_id: new ObjectId(session.getUser()._id)
+    };
+
+    if (where.status) {
+      whereOptions['status'] = where.status;
+    }
 
     return this.dataSource.getRepository(Reward).find({
-      where: {
-        user_id: new ObjectId(session.getUser()._id),
-        status: where.status
-      }
+      where: whereOptions
     });
   }
 

@@ -7,28 +7,28 @@ export class QueryPipe<Entity> implements PipeTransform<QueryData<Entity>> {
   
   constructor() {}
 
-  public transform(value: QueryData<Entity>): QueryData<Entity> {
-    if (value.where && typeof value.where === 'string') {
-      value.where = JSON.parse(value.where as any);
-    }
+  public transform(value: Record<string, any>): QueryData<Entity> {
+    const result = new QueryData<Entity>();
 
-    if (value.skip) {
-      value.skip = parseInt(value.skip as any);
-    }
+    result.where = {};
 
-    if (value.take) {
-      value.take = parseInt(value.take as any);
-    }
-
-    if (value.where) {
-      Object.keys(value.where).forEach(key => {
-        if (Array.isArray(value.where[key])) {
-          value.where[key] = In(value.where[key]);
+    Object.keys(value).forEach(key => {
+      if (key === 'skip') {
+        result.skip = parseInt(value.skip as any);
+      } else if (key === 'take') {
+        result.take = parseInt(value.take as any);
+      } else if (key === 'order') {
+        result.order = JSON.parse(value.order as any);
+      } else {
+        if (Array.isArray(value[key])) {
+          result.where[key] = In(value[key]);
+        } else {
+          result.where[key] = value[key];
         }
-      });
-    }
+      }
+    });
 
-    return value;
+    return result;
   }
 
 }
