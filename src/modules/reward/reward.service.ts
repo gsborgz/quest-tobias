@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { Reward } from '@entities/reward/reward.entity';
-import { QueryData } from '@core/type';
+import { BaseMessage, QueryData } from '@core/type';
 import { session } from '@core/session';
 import { RewardStatus } from '@entities/reward/reward.type';
 import { User } from '@entities/user/user.entity';
@@ -12,7 +12,7 @@ export class RewardService {
 
   constructor(private readonly dataSource: DataSource) {}
 
-  public findAll(query: QueryData<Reward>) {
+  public findAll(query: QueryData<Reward>): Promise<Reward[]> {
     const { where } = query;
     const whereOptions = {
       user_id: new ObjectId(session.getUser()._id)
@@ -39,7 +39,7 @@ export class RewardService {
     return this.dataSource.getRepository(Reward).save(body);
   }
 
-  public async claimReward(id: string): Promise<void> {
+  public async claimReward(id: string): Promise<Reward> {
     await this.validateId(id);
 
     const [reward, user] = await Promise.all([
@@ -53,15 +53,22 @@ export class RewardService {
       this.dataSource.getRepository(Reward).update({ _id: new ObjectId(id) }, { status: RewardStatus.CLAIMED }),
       this.dataSource.getRepository(User).update({ _id: new ObjectId(session.getUser()._id) }, { credits: user.credits - reward.value })
     ]);
+
+    return this.dataSource.getRepository(Reward).findOneBy({ _id: new ObjectId(id) });
   }
 
-  public async delete(id: string) {
+  public async delete(id: string): Promise<BaseMessage> {
     await this.validateId(id);
+    await this.dataSource.getRepository(Reward).delete({ _id: new ObjectId(id) });
 
-    return this.dataSource.getRepository(Reward).delete({ _id: new ObjectId(id) });
+    const result = new BaseMessage();
+
+    result.message = 'Recompensa excluída com sucesso';
+
+    return result;
   }
 
-  private async validateId(id: string) {
+  private async validateId(id: string): Promise<void> {
     const reward = await this.dataSource.getRepository(Reward).findOneByOrFail({ _id: new ObjectId(id) });
 
     if (!reward.user_id.equals(session.getUser()._id)) {
@@ -69,7 +76,7 @@ export class RewardService {
     }
   }
 
-  private checkIfUserHasEnoughCredits(reward: Reward, user: User) {
+  private checkIfUserHasEnoughCredits(reward: Reward, user: User): void {
     if (reward.value > user.credits) {
       throw new Error('Not enough credits');
     }

@@ -96,10 +96,16 @@ export class AuthService {
 		return { message: 'Password updated' };
 	}
 
-	public signout(): Promise<DeleteResult> {
-		return this.dataSource.getRepository(Token).delete({
+	public async signout(): Promise<BaseMessage> {
+		await this.dataSource.getRepository(Token).delete({
       user_id: new ObjectId(session.getUser()._id)
     });
+
+    const result = new BaseMessage();
+
+    result.message = 'Usuário deslogado com sucesso';
+
+    return result;
 	}
 
   private async encryptPassword(password: string): Promise<string> {

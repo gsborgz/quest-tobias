@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/
 import { RewardService } from '@modules/reward/reward.service';
 import { AuthProtection } from '@core/decorators/auth-protection.decorator';
 import { QueryPipe } from '@core/pipe/query.pipe';
-import { QueryData } from '@core/type';
+import { BaseMessage, QueryData } from '@core/type';
 import { Reward } from '@entities/reward/reward.entity';
 
 @Controller('rewards')
@@ -12,25 +12,25 @@ export class RewardController {
 
   @Get()
   @AuthProtection()
-  public findAll(@Query(new QueryPipe()) query: QueryData<Reward>) {
+  public findAll(@Query(new QueryPipe()) query: QueryData<Reward>): Promise<Reward[]> {
     return this.rewardService.findAll(query);
   }
 
   @Post()
   @AuthProtection()
-  public upsert(@Body() body: Reward) {
+  public upsert(@Body() body: Reward): Promise<Reward> {
     return this.rewardService.upsert(body);
   }
 
   @Put(':id/claim')
   @AuthProtection()
-  public claimReward(@Param('id') id: string) {
+  public claimReward(@Param('id') id: string): Promise<Reward> {
     return this.rewardService.claimReward(id);
   }
 
   @Delete(':id')
   @AuthProtection()
-  public delete(@Param('id') id: string) {
+  public delete(@Param('id') id: string): Promise<BaseMessage> {
     return this.rewardService.delete(id);
   }
 
