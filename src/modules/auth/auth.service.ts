@@ -37,7 +37,7 @@ export class AuthService {
       await this.dataSource.getRepository(Token).delete(userToken._id);
     }
 
-    const token = await this.tokenService.create(user, body.expires_in);
+    const token = await this.tokenService.create(user, body.expires_in || 64000);
 
     result.token = token;
 
@@ -104,6 +104,26 @@ export class AuthService {
     const result = new BaseMessage();
 
     result.message = 'Usuário deslogado com sucesso';
+
+    return result;
+	}
+
+  public async deleteAccount(): Promise<BaseMessage> {
+		const deleteUser = this.dataSource.getRepository(User).delete({
+      _id: new ObjectId(session.getUser()._id)
+    });
+    const deleteSession = this.dataSource.getRepository(Token).delete({
+      user_id: new ObjectId(session.getUser()._id)
+    });
+
+    await Promise.all([
+      deleteUser,
+      deleteSession
+    ]);
+
+    const result = new BaseMessage();
+
+    result.message = 'Conta encerrada com sucesso';
 
     return result;
 	}

@@ -37,4 +37,10 @@ export class AuthController {
 		return this.authService.signout();
 	}
 
+  @Delete('delete-account')
+	@AuthProtection()
+	public async deleteAccount(): Promise<BaseMessage> {
+		return this.authService.deleteAccount();
+	}
+
 }
