@@ -11,10 +11,11 @@ dotenv.config();
 const mongoUser = process.env.MONGO_USER;
 const mongoPassword = process.env.MONGO_PASSWORD;
 const mongoCluster = process.env.MONGO_CLUSTER;
+const isTest = process.env.NODE_ENV === 'test';
 
 export const mongoConfig = {
   type: 'mongodb',
-  database: 'tobias',
+  database: isTest ? 'db_tobias_test' : 'db_tobias',
   url: `mongodb+srv://${mongoUser}:${mongoPassword}@${mongoCluster}/?retryWrites=true&w=majority`,
   entities: [User, Quest, Reward, Token],
   synchronize: true,

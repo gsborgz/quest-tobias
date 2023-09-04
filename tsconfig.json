@@ -23,6 +23,7 @@
       "@modules/*": ["src/modules/*"],
       "@entities/*": ["src/entities/*"],
       "@core/*": ["src/core/*"],
+      "@test/*": ["test/*"],
     }
   }
 }
