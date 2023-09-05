@@ -13,9 +13,10 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "cross-env NODE_ENV=test node -r tsconfig-paths/register -r ts-node/register --test ./test/run.ts",
-    "test:dev": "glob -c \"node --loader tsx --no-warnings --test\" \"./src/**/*.{spec,test}.ts\"",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test": "cross-env NODE_ENV=test node -r tsconfig-paths/register -r ts-node/register --test",
+    "test:uni": "cross-env NODE_ENV=test node -r tsconfig-paths/register -r ts-node/register --test ./test/run-uni.ts",
+    "test:int": "cross-env NODE_ENV=test node -r tsconfig-paths/register -r ts-node/register --test ./test/run-int.ts",
+    "test:e2e": "cross-env NODE_ENV=test node -r tsconfig-paths/register -r ts-node/register --test ./test/run-e2e.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

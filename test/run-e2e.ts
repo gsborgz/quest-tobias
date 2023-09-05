@@ -2,14 +2,14 @@ import { join } from 'node:path';
 import { readdir } from 'node:fs/promises';
 
 const testFiles = [];
-const testDir = join(__dirname);
+const testDir = join(__dirname, 'e2e');
 
 (async () => {
   try {
     const files = await readdir(testDir);
-    
+
     files.forEach(function (file) {
-      if (file.match(/\.test\.ts$/)) {
+      if (file.match(/\.spec\.ts$/)) {
         testFiles.push(import(join(testDir, file)));
       }
     });
