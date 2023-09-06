@@ -111,7 +111,7 @@ export default describe('Auth', () => {
     });
   });
 
-  describe('/POST signin', () => {
+  describe('[POST] /signin', () => {
     it('should receive a body with a non existing user and fail', async () => {
       const body = new SigninDTO();
 
