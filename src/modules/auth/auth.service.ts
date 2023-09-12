@@ -57,6 +57,8 @@ export class AuthService {
     user.name = body.name;
     user.email = body.email;
     user.password = body.password;
+    user.language = body.language;
+    user.theme = body.theme;
     user.credits = 0;
 
     await this.dataSource.getRepository(User).save(user);

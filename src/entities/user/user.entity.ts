@@ -1,8 +1,7 @@
-import { Column, Entity, Index } from "typeorm";
-import { BaseEntity } from "@entities/base.entity";
-import { Quest } from "@src/entities/quest/quest.entity";
-import { Reward } from "@entities/reward/reward.entity";
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Column, Entity, Index } from 'typeorm';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { BaseEntity } from '@entities/base.entity';
+import { UserLanguage, UserTheme } from '@entities/user/user.type';
 
 @Entity()
 export class User extends BaseEntity {
@@ -27,5 +26,15 @@ export class User extends BaseEntity {
   @IsNotEmpty()
   @IsNumber()
   public credits: number;
+
+  @Column({ type: 'enum', enum: UserLanguage })
+  @IsOptional()
+  @IsEnum(UserLanguage)
+  public language: UserLanguage;
+
+  @Column({ type: 'enum', enum: UserTheme })
+  @IsOptional()
+  @IsEnum(UserTheme)
+  public theme: UserTheme;
 
 }

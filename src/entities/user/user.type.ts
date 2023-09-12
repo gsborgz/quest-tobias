@@ -1,4 +1,14 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+
+export enum UserLanguage {
+  EN = 'en',
+  PTBR = 'pt-br'
+}
+
+export enum UserTheme {
+  LIGHT = 'light',
+  DARK = 'dark'
+}
 
 export class SigninDTO {
 
@@ -37,6 +47,14 @@ export class SignupDTO {
   @IsNotEmpty()
   @IsNumber()
   public expires_in: number;
+
+  @IsNotEmpty()
+  @IsEnum(UserLanguage)
+  public language: UserLanguage;
+
+  @IsNotEmpty()
+  @IsEnum(UserTheme)
+  public theme: UserTheme;
 
 }
 
