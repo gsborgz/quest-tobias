@@ -1,8 +1,8 @@
-import { Column, Entity, Index } from "typeorm";
-import { BaseEntity } from "@entities/base.entity";
-import { QuestStatus } from "@src/entities/quest/quest.type";
-import { IsEnum, IsJSON, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
-import { ObjectId } from "mongodb";
+import { Column, Entity, Index } from 'typeorm';
+import { BaseEntity } from '@entities/base.entity';
+import { QuestStatus } from '@src/entities/quest/quest.type';
+import { IsEnum, IsJSON, IsNotEmpty, IsNumber, IsOptional, IsPositive, IsString } from 'class-validator';
+import { ObjectId } from 'mongodb';
 
 @Entity()
 export class Quest extends BaseEntity {

@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { MongoError } from './error.type';
+import { MongoError } from '@core/error/error.type';
 
 @Injectable()
 export class ErrorService {

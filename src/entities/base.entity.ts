@@ -1,5 +1,5 @@
-import { ObjectId } from "mongodb";
-import { CreateDateColumn, ObjectIdColumn, UpdateDateColumn } from "typeorm";
+import { ObjectId } from 'mongodb';
+import { CreateDateColumn, ObjectIdColumn, UpdateDateColumn } from 'typeorm';
 
 export class BaseEntity {
 

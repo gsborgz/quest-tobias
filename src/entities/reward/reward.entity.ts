@@ -1,8 +1,8 @@
-import { Column, Entity, Index } from "typeorm";
-import { BaseEntity } from "@entities/base.entity";
-import { RewardStatus } from "@entities/reward/reward.type";
-import { IsEnum, IsJSON, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
-import { ObjectId } from "mongodb";
+import { Column, Entity, Index } from 'typeorm';
+import { BaseEntity } from '@entities/base.entity';
+import { RewardStatus } from '@entities/reward/reward.type';
+import { IsEnum, IsJSON, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { ObjectId } from 'mongodb';
 
 @Entity()
 export class Reward extends BaseEntity {

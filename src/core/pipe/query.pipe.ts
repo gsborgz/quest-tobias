@@ -1,6 +1,6 @@
-import { Injectable, PipeTransform } from "@nestjs/common";
-import { QueryData } from "@core/type";
-import { In } from "typeorm";
+import { Injectable, PipeTransform } from '@nestjs/common';
+import { QueryData } from '@core/type';
+import { In } from 'typeorm';
 
 @Injectable()
 export class QueryPipe<Entity> implements PipeTransform<QueryData<Entity>> {
