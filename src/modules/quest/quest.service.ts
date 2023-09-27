@@ -60,11 +60,7 @@ export class QuestService {
     await this.validateId(id);
     await this.dataSource.getRepository(Quest).delete({ _id: new ObjectId(id) });
 
-    const result = new BaseMessage();
-
-    result.message = 'Missão excluída com sucesso';
-
-    return result;
+    return new BaseMessage('Mission deleted successfully');
   }
 
   private async validateId(id: string): Promise<void> {

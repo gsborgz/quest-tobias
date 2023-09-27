@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post, Delete, Headers } from '@nestjs/common';
+import { Body, Controller, Get, Post, Delete, Put, Param } from '@nestjs/common';
 import { AuthService } from '@modules/auth/auth.service';
-import { PasswordResetDTO, SigninDTO, SigninResultDTO, SignupDTO } from '@entities/user/user.type';
+import { PasswordResetDTO, SigninDTO, SigninResultDTO, SignupDTO, UserLanguage, UserTheme } from '@entities/user/user.type';
 import { AuthProtection } from '@core/decorators/auth-protection.decorator';
 import { BaseMessage } from '@core/type';
 import { User } from '@entities/user/user.entity';
@@ -30,6 +30,18 @@ export class AuthController {
 	public async requestPasswordReset(@Body() body: PasswordResetDTO): Promise<BaseMessage> {
 		return this.authService.requestPasswordReset(body);
 	}
+
+  @Put('set-language/:language')
+  @AuthProtection()
+  public setLanguage(@Param('language') language: UserLanguage): Promise<BaseMessage> {
+    return this.authService.setLanguage(language);
+  }
+
+  @Put('set-theme/:theme')
+  @AuthProtection()
+  public setTheme(@Param('theme') theme: UserTheme): Promise<BaseMessage> {
+    return this.authService.setTheme(theme);
+  }
 
   @Delete('signout')
 	@AuthProtection()

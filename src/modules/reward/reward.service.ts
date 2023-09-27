@@ -61,11 +61,7 @@ export class RewardService {
     await this.validateId(id);
     await this.dataSource.getRepository(Reward).delete({ _id: new ObjectId(id) });
 
-    const result = new BaseMessage();
-
-    result.message = 'Recompensa excluída com sucesso';
-
-    return result;
+    return new BaseMessage('Reward deleted successfully');
   }
 
   private async validateId(id: string): Promise<void> {

@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { DataSource, DeleteResult } from 'typeorm';
+import { DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { PasswordResetDTO, SigninDTO, SigninResultDTO, SignupDTO, UpdatePasswordDTO } from '@entities/user/user.type';
+import { PasswordResetDTO, SigninDTO, SigninResultDTO, SignupDTO, UpdatePasswordDTO, UserLanguage, UserTheme } from '@entities/user/user.type';
 import { User } from '@entities/user/user.entity';
 import { session } from '@core/session';
 import { Token } from '@entities/token/token.entity';
@@ -21,7 +21,14 @@ export class AuthService {
 
   public getMe(): Promise<User> {
     return this.dataSource.getRepository(User).findOneOrFail({
-      select: ['_id', 'name', 'email', 'credits'],
+      select: {
+        _id: true,
+        name: true,
+        email: true,
+        language: true,
+        theme: true,
+        credits: true
+      },
       where: { _id: new ObjectId(session.getUser()._id) }
     });
   }
@@ -45,7 +52,8 @@ export class AuthService {
   }
 
   public async signup(body: SignupDTO): Promise<SigninResultDTO> {
-    const signinBody = { email: body.email, password: body.password, expires_in: body.expires_in };
+    const { name, email, password, expires_in, language, theme } = body;
+    const signinBody = { email, password, expires_in };
     const user = new User();
 
     await this.checkIfUserDoesNotExist(body.email);
@@ -54,11 +62,11 @@ export class AuthService {
 
     body.password = await this.encryptPassword(body.password);
 
-    user.name = body.name;
-    user.email = body.email;
-    user.password = body.password;
-    user.language = body.language;
-    user.theme = body.theme;
+    user.name = name;
+    user.email = email;
+    user.password = password;
+    user.language = language;
+    user.theme = theme;
     user.credits = 0;
 
     await this.dataSource.getRepository(User).save(user);
@@ -80,9 +88,7 @@ export class AuthService {
 			}
 		});
 
-		return {
-			message: 'Email sent'
-		};
+		return new BaseMessage('Email sent');
 	}
 
   public async updatePassword(id: string, body: UpdatePasswordDTO): Promise<BaseMessage> {
@@ -95,19 +101,39 @@ export class AuthService {
 
 		await this.dataSource.getRepository(User).save(user);
 
-		return { message: 'Password updated' };
+		return new BaseMessage('Password updated');
 	}
+
+  public async setLanguage(language: UserLanguage): Promise<BaseMessage> {
+    const user = session.getUser();
+
+    if (!Object.values(UserLanguage).includes(language)) {
+      throw new BadRequestException('Invalid language');
+    }
+
+    await this.dataSource.getRepository(User).update(user._id, { language: language });
+
+    return new BaseMessage('Language updated');
+  }
+
+  public async setTheme(theme: UserTheme): Promise<BaseMessage> {
+    const user = session.getUser();
+
+    if (!Object.values(UserTheme).includes(theme)) {
+      throw new BadRequestException('Invalid theme');
+    }
+
+    await this.dataSource.getRepository(User).update(user._id, { theme: theme });
+
+    return new BaseMessage('Theme updated');
+  }
 
 	public async signout(): Promise<BaseMessage> {
 		await this.dataSource.getRepository(Token).delete({
       user_id: new ObjectId(session.getUser()._id)
     });
 
-    const result = new BaseMessage();
-
-    result.message = 'Usuário deslogado com sucesso';
-
-    return result;
+    return new BaseMessage('Successfully signed out');
 	}
 
   public async deleteAccount(): Promise<BaseMessage> {
@@ -123,11 +149,7 @@ export class AuthService {
       deleteSession
     ]);
 
-    const result = new BaseMessage();
-
-    result.message = 'Conta encerrada com sucesso';
-
-    return result;
+    return new BaseMessage('Account deleted successfully');
 	}
 
   private async encryptPassword(password: string): Promise<string> {
