@@ -16,6 +16,12 @@ export class RewardController {
     return this.rewardService.findAll(query);
   }
 
+  @Get(':id')
+  @AuthProtection()
+  public findOne(@Param('id') id: string): Promise<Reward> {
+    return this.rewardService.findOne(id);
+  }
+
   @Post()
   @AuthProtection()
   public upsert(@Body() body: Reward): Promise<Reward> {

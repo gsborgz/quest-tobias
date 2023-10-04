@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { DataSource, FindOptionsSelect, FindOptionsWhere } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { Reward } from '@entities/reward/reward.entity';
 import { BaseMessage, QueryData } from '@core/type';
@@ -13,18 +13,38 @@ export class RewardService {
   constructor(private readonly dataSource: DataSource) {}
 
   public findAll(query: QueryData<Reward>): Promise<Reward[]> {
-    const { where } = query;
-    const whereOptions = {
+    const { where: whereOptions } = query;
+    const where: FindOptionsWhere<Reward> = {
       user_id: new ObjectId(session.getUser()._id)
     };
+    const select: FindOptionsSelect<Reward> = {
+      _id: true,
+      name: true,
+      description: true,
+      value: true
+    };
 
-    if (where.status) {
-      whereOptions['status'] = where.status;
+    if (whereOptions.status) {
+      where['status'] = whereOptions.status;
     }
 
-    return this.dataSource.getRepository(Reward).find({
-      where: whereOptions
-    });
+    return this.dataSource.getRepository(Reward).find({ where, select });
+  }
+
+  public findOne(id: string): Promise<Reward> {
+    const where: FindOptionsWhere<Reward> = {
+      _id: new ObjectId(id),
+      user_id: new ObjectId(session.getUser()._id)
+    };
+    const select: FindOptionsSelect<Reward> = {
+      _id: true,
+      name: true,
+      description: true,
+      value: true,
+      status: true
+    };
+
+    return this.dataSource.getRepository(Reward).findOne({ where, select });
   }
 
   public async upsert(body: Reward): Promise<Reward> {

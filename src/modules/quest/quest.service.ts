@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource } from 'typeorm';
+import { DataSource, FindOptionsSelect, FindOptionsWhere } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { session } from '@core/session';
 import { Quest } from '@src/entities/quest/quest.entity';
@@ -13,18 +13,38 @@ export class QuestService {
   constructor(private readonly dataSource: DataSource) {}
 
   public findAll(query: QueryData<Quest>): Promise<Quest[]> {
-    const { where } = query;
-    const whereOptions = {
+    const { where: whereOptions } = query;
+    const where: FindOptionsWhere<Quest> = {
       user_id: new ObjectId(session.getUser()._id)
     };
+    const select: FindOptionsSelect<Quest> = {
+      _id: true,
+      name: true,
+      value: true,
+    };
 
-    if (where.status) {
-      whereOptions['status'] = where.status;
+    if (whereOptions.status) {
+      where['status'] = whereOptions.status;
     }
 
-    return this.dataSource.getRepository(Quest).find({
-      where: whereOptions
-    });
+    return this.dataSource.getRepository(Quest).find({ where, select });
+  }
+
+  public findOne(id: string): Promise<Quest> {
+    const where: FindOptionsWhere<Quest> = {
+      _id: new ObjectId(id),
+      user_id: new ObjectId(session.getUser()._id)
+    };
+    const select: FindOptionsSelect<Quest> = {
+      _id: true,
+      name: true,
+      description: true,
+      value: true,
+      date: true,
+      status: true
+    };
+
+    return this.dataSource.getRepository(Quest).findOne({ where, select });
   }
 
   public async upsert(body: Quest): Promise<Quest> {

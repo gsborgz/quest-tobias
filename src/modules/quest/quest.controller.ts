@@ -16,6 +16,12 @@ export class QuestController {
     return this.questService.findAll(query);
   }
 
+  @Get(':id')
+  @AuthProtection()
+  public findOne(@Param() id: string): Promise<Quest> {
+    return this.questService.findOne(id);
+  }
+
   @Post()
   @AuthProtection()
   public upsert(@Body() body: Quest): Promise<Quest> {
