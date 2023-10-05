@@ -44,7 +44,7 @@ export class EmailService {
 
 		return new EmailTemplate({
 			message: {
-				from: `My Quest <${from}>`
+				from: `Quest <${from}>`
 			},
 			views: {
 				root: 'src/core/email/templates'
