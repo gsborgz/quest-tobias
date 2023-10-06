@@ -35,20 +35,13 @@ export class AuthService {
 
   public async signin(body: SigninDTO): Promise<SigninResultDTO> {
     const user = await this.findUserByEmail(body.email);
-    const userToken = await this.dataSource.getRepository(Token).findOneBy({ user_id: new ObjectId(user._id) });
-    const result = new SigninResultDTO();
 
     await this.comparePassword(body, user);
-
-    if (userToken) {
-      await this.dataSource.getRepository(Token).delete(userToken._id);
-    }
-
+    await this.checkIfTokenExists(user);
+    
     const token = await this.tokenService.create(user, body.expires_in || 64000);
 
-    result.token = token;
-
-    return result;
+    return new SigninResultDTO(token);
   }
 
   public async signup(body: SignupDTO): Promise<SigninResultDTO> {
@@ -60,11 +53,9 @@ export class AuthService {
 
     this.checkIfPasswordsMatch(body);
 
-    body.password = await this.encryptPassword(body.password);
-
     user.name = name;
     user.email = email;
-    user.password = password;
+    user.password = await this.encryptPassword(password);
     user.language = language;
     user.theme = theme;
     user.credits = 0;
@@ -185,6 +176,14 @@ export class AuthService {
 
     if (user) {
       throw new BadRequestException('User already exists');
+    }
+  }
+
+  private async checkIfTokenExists(user: User): Promise<void> {
+    const userToken = await this.dataSource.getRepository(Token).findOneBy({ user_id: new ObjectId(user._id) });
+    
+    if (userToken) {
+      await this.dataSource.getRepository(Token).delete(userToken._id);
     }
   }
 

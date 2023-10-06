@@ -70,6 +70,10 @@ export class SigninResultDTO {
 
   public token: string;
 
+  constructor(token: string) {
+    this.token = token;
+  }
+
 }
 
 export class UpdatePasswordDTO {
