@@ -17,8 +17,8 @@ export class Quest extends BaseEntity {
   @IsString()
   public description: string;
 
-  @Column({ type: 'date' })
-  @IsNotEmpty()
+  @Column({ type: 'date', nullable: true })
+  @IsOptional()
   @IsString()
   public date: Date;
 
