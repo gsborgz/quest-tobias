@@ -3,7 +3,7 @@ import * as assert from 'node:assert/strict';
 import { describe, before, after, it } from 'node:test';
 import { Test } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { SigninDTO, SigninResultDTO, SignupDTO } from '@src/entities/user/user.type';
+import { SigninDTO, SigninResultDTO, SignupDTO, UserLanguage, UserTheme } from '@src/entities/user/user.type';
 import { mongoConfig } from '@core/database/datasource';
 import { AuthModule } from '@modules/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -27,7 +27,7 @@ export default describe('Auth', () => {
     await app.init();
   });
 
-  describe('[POST] /signup', () => {
+  describe('[POST] /auth/signup', () => {
     it('should receive a body with non-corresponding passwords and fail', async () => {
       const body = new SignupDTO();
 
@@ -66,13 +66,15 @@ export default describe('Auth', () => {
       body.name = 'Miguel O Hara';
       body.email = 'spiderman2099@testmail.com';
       body.password = 'spiderman2099';
+      body.language = UserLanguage.EN;
+      body.theme = UserTheme.DARK;
       body.password_confirmation = 'spiderman2099';
 
       await request(app.getHttpServer())
         .post('/auth/signup')
         .send(body)
         .then((response) => {
-          const body: SigninResultDTO = response.body; 
+          const body: SigninResultDTO = response.body;
 
           assert.strictEqual(response.statusCode, 201);
           assert.strictEqual(typeof body.token, 'string');
@@ -83,7 +85,7 @@ export default describe('Auth', () => {
     });
   });
 
-  describe('[DELETE] /signout', () => {
+  describe('[DELETE] /auth/signout', () => {
     it('should receive an invalid authorization and fail', async () => {
       await request(app.getHttpServer())
         .delete('/auth/signout')
@@ -111,7 +113,7 @@ export default describe('Auth', () => {
     });
   });
 
-  describe('[POST] /signin', () => {
+  describe('[POST] /auth/signin', () => {
     it('should receive a body with a non existing user and fail', async () => {
       const body = new SigninDTO();
 
@@ -140,28 +142,28 @@ export default describe('Auth', () => {
         });
     });
 
-    it ('should receive a valid body and succeed', async () => {
+    it('should receive a valid body and succeed', async () => {
       const body = new SigninDTO();
-  
+
       body.email = 'spiderman2099@testmail.com';
       body.password = 'spiderman2099';
-  
+
       await request(app.getHttpServer())
         .post('/auth/signin')
         .send(body)
         .then((response) => {
-          const body: SigninResultDTO = response.body; 
-  
+          const body: SigninResultDTO = response.body;
+
           assert.strictEqual(response.statusCode, 201);
           assert.strictEqual(typeof body.token, 'string');
           assert.strictEqual(body.token.includes('Bearer'), true);
-  
+
           token = body.token;
         });
     });
   });
 
-  describe('[GET] /me', () => {
+  describe('[GET] /auth/me', () => {
     it('should receive an invalid authorization and fail', async () => {
       await request(app.getHttpServer())
         .get('/auth/me')
@@ -189,7 +191,7 @@ export default describe('Auth', () => {
     });
   });
 
-  describe('[DELETE] /delete-account', () => {
+  describe('[DELETE] /auth/delete-account', () => {
     it('should receive an invalid authorization and fail', async () => {
       await request(app.getHttpServer())
         .delete('/auth/delete-account')
