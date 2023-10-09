@@ -15,7 +15,7 @@ const isTest = process.env.NODE_ENV === 'test';
 
 export const mongoConfig = {
   type: 'mongodb',
-  database: isTest ? 'db_tobias_test' : 'db_tobias',
+  database: isTest ? process.env.MONGO_TEST_DB : process.env.MONGO_DB,
   url: `mongodb+srv://${mongoUser}:${mongoPassword}@${mongoCluster}/?retryWrites=true&w=majority`,
   entities: [User, Quest, Reward, Token],
   synchronize: true,
