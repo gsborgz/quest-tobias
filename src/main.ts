@@ -5,15 +5,9 @@ import * as cors from 'cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const corsOptions: cors.CorsOptions = {
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    preflightContinue: false,
-    optionsSuccessStatus: 200,
-  };
 
   app.useGlobalPipes(new ValidationPipe({ skipMissingProperties: true }));
-  app.use(cors(corsOptions));
+  app.enableCors({ origin: true });
 
   await app.listen(3333);
 
