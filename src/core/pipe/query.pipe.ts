@@ -1,5 +1,5 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
-import { QueryData } from '@core/type';
+import { GenericObject, QueryData } from '@core/type';
 import { In } from 'typeorm';
 
 @Injectable()
@@ -7,7 +7,7 @@ export class QueryPipe<Entity> implements PipeTransform<QueryData<Entity>> {
   
   constructor() {}
 
-  public transform(value: Record<string, any>): QueryData<Entity> {
+  public transform(value: GenericObject): QueryData<Entity> {
     const result = new QueryData<Entity>();
 
     result.where = {};

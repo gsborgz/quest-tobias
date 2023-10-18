@@ -1,5 +1,6 @@
 import { EmailOptions } from 'email-templates';
 import * as Email from 'email-templates';
+import { GenericObject } from '@core/type';
 
 export type Locals = {
 	[key: string]: string | number;
@@ -75,7 +76,7 @@ export type OptionsMap = {
 }
 
 export type OptionsEngine = {
-	requires: Record<string, any>;
+	requires: GenericObject;
 }
 
 export type ViewsOptions = {

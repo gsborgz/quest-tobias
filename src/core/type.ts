@@ -14,3 +14,5 @@ export class BaseMessage {
   }
 
 }
+
+export type GenericObject = Record<string, any>;
