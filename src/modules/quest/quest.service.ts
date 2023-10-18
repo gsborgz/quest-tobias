@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { DataSource, FindOptionsSelect, FindOptionsWhere } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { session } from '@core/session';
@@ -80,14 +80,14 @@ export class QuestService {
     await this.validateId(id);
     await this.dataSource.getRepository(Quest).delete({ _id: new ObjectId(id) });
 
-    return new BaseMessage('Mission deleted successfully');
+    return new BaseMessage('text.quest_deleted');
   }
 
   private async validateId(id: string): Promise<void> {
     const quest = await this.dataSource.getRepository(Quest).findOneByOrFail({ _id: new ObjectId(id) });
 
     if (!quest.user_id.equals(session.getUser()._id)) {
-      throw new Error('Unauthorized');
+      throw new UnauthorizedException('text.unauthorized');
     }
   }
 

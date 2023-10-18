@@ -79,7 +79,7 @@ export class AuthService {
 			}
 		});
 
-		return new BaseMessage('Email sent');
+		return new BaseMessage('text.email_sent');
 	}
 
   public async updatePassword(id: string, body: UpdatePasswordDTO): Promise<BaseMessage> {
@@ -92,31 +92,31 @@ export class AuthService {
 
 		await this.dataSource.getRepository(User).save(user);
 
-		return new BaseMessage('Password updated');
+		return new BaseMessage('text.password_updated');
 	}
 
   public async setLanguage(language: UserLanguage): Promise<BaseMessage> {
     const user = session.getUser();
 
     if (!Object.values(UserLanguage).includes(language)) {
-      throw new BadRequestException('Invalid language');
+      throw new BadRequestException('text.invalid_language');
     }
 
     await this.dataSource.getRepository(User).update(user._id, { language: language });
 
-    return new BaseMessage('Language updated');
+    return new BaseMessage('text.language_updated');
   }
 
   public async setTheme(theme: UserTheme): Promise<BaseMessage> {
     const user = session.getUser();
 
     if (!Object.values(UserTheme).includes(theme)) {
-      throw new BadRequestException('Invalid theme');
+      throw new BadRequestException('text.invalid_theme');
     }
 
     await this.dataSource.getRepository(User).update(user._id, { theme: theme });
 
-    return new BaseMessage('Theme updated');
+    return new BaseMessage('text.theme_updated');
   }
 
 	public async signout(): Promise<BaseMessage> {
@@ -124,7 +124,7 @@ export class AuthService {
       user_id: new ObjectId(session.getUser()._id)
     });
 
-    return new BaseMessage('Successfully signed out');
+    return new BaseMessage('text.signed_out');
 	}
 
   public async deleteAccount(): Promise<BaseMessage> {
@@ -140,7 +140,7 @@ export class AuthService {
       deleteSession
     ]);
 
-    return new BaseMessage('Account deleted successfully');
+    return new BaseMessage('text.account_deleted');
 	}
 
   private async encryptPassword(password: string): Promise<string> {
@@ -151,7 +151,7 @@ export class AuthService {
     const samePassword = await bcrypt.compare(body.password, user.password);
 
     if (!samePassword) {
-      throw new BadRequestException('User not found');
+      throw new BadRequestException('text.user_not_found');
     }
   }
 
@@ -159,7 +159,7 @@ export class AuthService {
     const user = await this.dataSource.getRepository(User).findOneBy({ email });
 
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new BadRequestException('text.user_not_found');
     }
 
     return user;
@@ -167,7 +167,7 @@ export class AuthService {
 
   private checkIfPasswordsMatch(body: SignupDTO | UpdatePasswordDTO): void {
     if (body.password !== body.password_confirmation) {
-      throw new BadRequestException('Passwords do not match');
+      throw new BadRequestException('text.passwords_do_not_match');
     }
   }
 
@@ -175,7 +175,7 @@ export class AuthService {
     const user = await this.dataSource.getRepository(User).findOneBy({ email } );
 
     if (user) {
-      throw new BadRequestException('User already exists');
+      throw new BadRequestException('text.user_already_exists');
     }
   }
 

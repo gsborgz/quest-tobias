@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { DataSource, FindOptionsSelect, FindOptionsWhere } from 'typeorm';
 import { ObjectId } from 'mongodb';
 import { Reward } from '@entities/reward/reward.entity';
@@ -81,20 +81,20 @@ export class RewardService {
     await this.validateId(id);
     await this.dataSource.getRepository(Reward).delete({ _id: new ObjectId(id) });
 
-    return new BaseMessage('Reward deleted successfully');
+    return new BaseMessage('text.reward_deleted');
   }
 
   private async validateId(id: string): Promise<void> {
     const reward = await this.dataSource.getRepository(Reward).findOneByOrFail({ _id: new ObjectId(id) });
 
     if (!reward.user_id.equals(session.getUser()._id)) {
-      throw new Error('Unauthorized');
+      throw new UnauthorizedException('text.unauthorized');
     }
   }
 
   private checkIfUserHasEnoughCredits(reward: Reward, user: User): void {
     if (reward.value > user.credits) {
-      throw new Error('Not enough credits');
+      throw new BadRequestException('text.not_enough_credits');
     }
   }
 
