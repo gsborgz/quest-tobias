@@ -9,6 +9,11 @@ export class User extends BaseEntity {
   @Column({ type: 'string' })
   @IsNotEmpty()
   @IsString()
+  public avatar: string;
+
+  @Column({ type: 'string' })
+  @IsNotEmpty()
+  @IsString()
   public name: string;
 
   @Column({ type: 'string' })

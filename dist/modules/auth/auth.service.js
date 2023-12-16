@@ -42,7 +42,7 @@ let AuthService = exports.AuthService = class AuthService {
     }
     async signin(body) {
         const user = await this.findUserByEmail(body.email);
-        await this.comparePassword(body, user);
+        await this.comparePassword(body.password, user.password);
         await this.checkIfTokenExists(user);
         const token = await this.tokenService.create(user, body.expires_in || 64000);
         return new user_type_1.SigninResultDTO(token);
@@ -76,11 +76,24 @@ let AuthService = exports.AuthService = class AuthService {
         });
         return new type_1.BaseMessage('text.email_sent');
     }
-    async updatePassword(id, body) {
+    async updateProfile(body) {
+        const userId = session_1.session.getUser()._id;
+        await this.dataSource.getRepository(user_entity_1.User).update({ _id: new mongodb_1.ObjectId(userId) }, body);
+        return new type_1.BaseMessage('text.profile_updated');
+    }
+    async resetPassword(body) {
+        const userId = session_1.session.getUser()._id;
         this.checkIfPasswordsMatch(body);
-        const { password } = body;
-        const user = await this.dataSource.getRepository(user_entity_1.User).findOneByOrFail({ _id: new mongodb_1.ObjectId(id) });
-        user.password = await this.encryptPassword(password);
+        const newPassword = await this.encryptPassword(body.password);
+        await this.dataSource.getRepository(user_entity_1.User).update({ _id: new mongodb_1.ObjectId(userId) }, { password: newPassword });
+        return new type_1.BaseMessage('text.language_updated');
+    }
+    async updatePassword(body) {
+        const userId = session_1.session.getUser()._id;
+        this.checkIfPasswordsMatch(body);
+        const user = await this.dataSource.getRepository(user_entity_1.User).findOneByOrFail({ _id: new mongodb_1.ObjectId(userId) });
+        await this.comparePassword(body.current_password, user.password);
+        user.password = await this.encryptPassword(body.password);
         await this.dataSource.getRepository(user_entity_1.User).save(user);
         return new type_1.BaseMessage('text.password_updated');
     }
@@ -122,8 +135,8 @@ let AuthService = exports.AuthService = class AuthService {
     async encryptPassword(password) {
         return bcrypt.hash(password, 10);
     }
-    async comparePassword(body, user) {
-        const samePassword = await bcrypt.compare(body.password, user.password);
+    async comparePassword(input_password, database_password) {
+        const samePassword = await bcrypt.compare(input_password, database_password);
         if (!samePassword) {
             throw new common_1.BadRequestException('text.user_not_found');
         }

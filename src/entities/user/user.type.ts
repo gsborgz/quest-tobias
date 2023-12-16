@@ -58,11 +58,51 @@ export class SignupDTO {
 
 }
 
-export class PasswordResetDTO {
+export class PasswordResetRequestDTO {
 
   @IsNotEmpty()
   @IsString()
   public email: string;
+
+}
+
+export class UpdateProfileDTO {
+
+  @IsNotEmpty()
+  @IsString()
+  public avatar: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public name: string;
+
+}
+
+export class ResetPasswordDTO {
+
+  @IsNotEmpty()
+  @IsString()
+  public password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public password_confirmation: string;
+
+}
+
+export class UpdatePasswordDTO {
+
+  @IsNotEmpty()
+  @IsString()
+  public current_password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public password: string;
+
+  @IsNotEmpty()
+  @IsString()
+  public password_confirmation: string;
 
 }
 
@@ -73,17 +113,5 @@ export class SigninResultDTO {
   constructor(token: string) {
     this.token = token;
   }
-
-}
-
-export class UpdatePasswordDTO {
-
-  @IsNotEmpty()
-  @IsString()
-  public password: string;
-
-  @IsNotEmpty()
-  @IsString()
-  public password_confirmation: string;
 
 }

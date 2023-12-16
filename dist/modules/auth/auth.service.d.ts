@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { PasswordResetDTO, SigninDTO, SigninResultDTO, SignupDTO, UpdatePasswordDTO, UserLanguage, UserTheme } from '@entities/user/user.type';
+import { ResetPasswordDTO, PasswordResetRequestDTO, SigninDTO, SigninResultDTO, SignupDTO, UpdatePasswordDTO, UserLanguage, UserTheme, UpdateProfileDTO } from '@entities/user/user.type';
 import { User } from '@entities/user/user.entity';
 import { TokenService } from '@modules/auth/token/token.service';
 import { BaseMessage } from '@core/type';
@@ -12,8 +12,10 @@ export declare class AuthService {
     getMe(): Promise<User>;
     signin(body: SigninDTO): Promise<SigninResultDTO>;
     signup(body: SignupDTO): Promise<SigninResultDTO>;
-    requestPasswordReset({ email }: PasswordResetDTO): Promise<BaseMessage>;
-    updatePassword(id: string, body: UpdatePasswordDTO): Promise<BaseMessage>;
+    requestPasswordReset({ email }: PasswordResetRequestDTO): Promise<BaseMessage>;
+    updateProfile(body: UpdateProfileDTO): Promise<BaseMessage>;
+    resetPassword(body: ResetPasswordDTO): Promise<BaseMessage>;
+    updatePassword(body: UpdatePasswordDTO): Promise<BaseMessage>;
     setLanguage(language: UserLanguage): Promise<BaseMessage>;
     setTheme(theme: UserTheme): Promise<BaseMessage>;
     signout(): Promise<BaseMessage>;

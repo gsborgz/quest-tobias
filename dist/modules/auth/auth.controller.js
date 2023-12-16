@@ -33,6 +33,15 @@ let AuthController = exports.AuthController = class AuthController {
     async requestPasswordReset(body) {
         return this.authService.requestPasswordReset(body);
     }
+    updateProfile(body) {
+        return this.authService.updateProfile(body);
+    }
+    resetPassword(body) {
+        return this.authService.resetPassword(body);
+    }
+    updatePassword(body) {
+        return this.authService.updatePassword(body);
+    }
     setLanguage(language) {
         return this.authService.setLanguage(language);
     }
@@ -55,6 +64,7 @@ __decorate([
 ], AuthController.prototype, "me", null);
 __decorate([
     (0, common_1.Post)('signin'),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ skipMissingProperties: true })),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [user_type_1.SigninDTO]),
@@ -62,6 +72,7 @@ __decorate([
 ], AuthController.prototype, "signin", null);
 __decorate([
     (0, common_1.Post)('signup'),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ skipMissingProperties: true })),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [user_type_1.SignupDTO]),
@@ -69,11 +80,39 @@ __decorate([
 ], AuthController.prototype, "signup", null);
 __decorate([
     (0, common_1.Post)('request-password-reset'),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ skipMissingProperties: true })),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_type_1.PasswordResetDTO]),
+    __metadata("design:paramtypes", [user_type_1.PasswordResetRequestDTO]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "requestPasswordReset", null);
+__decorate([
+    (0, common_1.Put)('update-profile'),
+    (0, auth_protection_decorator_1.AuthProtection)(),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ skipMissingProperties: true })),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_type_1.UpdateProfileDTO]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "updateProfile", null);
+__decorate([
+    (0, common_1.Put)('reset-password'),
+    (0, auth_protection_decorator_1.AuthProtection)(),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ skipMissingProperties: true })),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_type_1.ResetPasswordDTO]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "resetPassword", null);
+__decorate([
+    (0, common_1.Put)('update-password'),
+    (0, auth_protection_decorator_1.AuthProtection)(),
+    (0, common_1.UsePipes)(new common_1.ValidationPipe({ skipMissingProperties: true })),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_type_1.UpdatePasswordDTO]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "updatePassword", null);
 __decorate([
     (0, common_1.Put)('set-language/:language'),
     (0, auth_protection_decorator_1.AuthProtection)(),
